@@ -1,0 +1,894 @@
+# Bybit V5 API - Semua Endpoint Documentation
+
+Bybit V5 API menggunakan struktur penamaan yang konsisten dengan format: `{host}/{version}/{module}` dimana semua endpoint menggunakan path `/v5/`. API ini menyatukan trading untuk Spot, Derivatives, dan Options dalam satu set spesifikasi.[1]
+
+## Struktur API Endpoints
+
+### 1. Market Data Endpoints (`/v5/market/`)
+Endpoint untuk data pasar real-time dan historis - tidak memerlukan autentikasi:[2][1]
+
+- **GET /v5/market/time** - Get Bybit Server Time[2]
+- **GET /v5/market/kline** - Get kline/candlestick data[2]
+- **GET /v5/market/mark-price-kline** - Get Mark Price Kline data[2]
+- **GET /v5/market/index-price-kline** - Get Index Price Kline data[2]
+- **GET /v5/market/premium-index-price-kline** - Get Premium Index Price Kline data[2]
+- **GET /v5/market/instruments-info** - Get launched instruments information[3][2]
+- **GET /v5/market/orderbook** - Get order book data[3][2]
+- **GET /v5/market/tickers** - Get all latest information of symbols[3][2]
+- **GET /v5/market/funding-history** - Get historical funding rate[2]
+- **GET /v5/market/recent-trade** - Get public trade history[3][2]
+- **GET /v5/market/open-interest** - Get open interest[2]
+- **GET /v5/market/historical-volatility** - Get historical volatility[2]
+- **GET /v5/market/insurance** - Get Insurance fund data[2]
+- **GET /v5/market/risk-limit** - Get risk limit[2]
+- **GET /v5/market/delivery-price** - Get delivery price[2]
+- **GET /v5/market/long-short-ratio** - Get long short ratio[2]
+
+### 2. Order Management Endpoints (`/v5/order/`)
+Endpoint untuk manajemen order trading:[1][3]
+
+- **POST /v5/order/create** - Place new orders untuk Spot, Margin, USDT perpetual, USDT futures, USDC perpetual, USDC futures, Inverse Futures dan Options[4][3]
+- **POST /v5/order/amend** - Modify existing orders[3]
+- **POST /v5/order/cancel** - Cancel active orders[3]
+- **POST /v5/order/create-batch** - Place multiple orders[5]
+- **GET /v5/order/history** - Query historical orders[3]
+- **GET /v5/order/realtime** - Get active orders
+- **POST /v5/order/cancel-all** - Cancel all orders
+
+### 3. Position Management Endpoints (`/v5/position/`)
+Endpoint untuk manajemen posisi trading:[6][1]
+
+- **GET /v5/position/list** - Get Position Info[6][3]
+- **POST /v5/position/set-leverage** - Set leverage[6][3]
+- **POST /v5/position/switch-isolated** - Switch Cross/Isolated Margin[6]
+- **POST /v5/position/set-tpsl-mode** - Set TP/SL Mode[6]
+- **POST /v5/position/switch-mode** - Switch Position Mode[6]
+- **POST /v5/position/set-risk-limit** - Set risk limit[6]
+- **POST /v5/position/trading-stop** - Set trading stop (take profit/stop loss)[3][6]
+- **POST /v5/position/set-auto-add-margin** - Set Auto Add Margin[6]
+- **POST /v5/position/add-margin** - Add Or Reduce Margin[6]
+- **GET /v5/position/execution-list** - Get Execution list (2 years)[6]
+- **GET /v5/position/closed-pnl** - Get Closed PnL[6]
+
+### 4. Account Management Endpoints (`/v5/account/`)
+Endpoint untuk operasi akun tunggal:[7][1]
+
+- **GET /v5/account/wallet-balance** - Get wallet balance[7][3]
+- **POST /v5/account/upgrade** - Upgrade to Unified Account[7]
+- **POST /v5/account/set-collateral-coin** - Set collateral coin[7]
+- **GET /v5/account/borrow-history** - Get borrow history[7]
+- **GET /v5/account/collateral-info** - Get collateral info[7]
+- **GET /v5/account/coin-greeks** - Get coin Greeks info[8][7]
+- **GET /v5/account/fee-rate** - Get fee rate[7][3]
+- **GET /v5/account/info** - Get account info[7]
+- **GET /v5/account/transaction-log** - Get transaction log[8][7]
+- **POST /v5/account/set-margin-mode** - Set margin mode[7]
+- **POST /v5/account/set-spot-hedging** - Set spot hedging for Portfolio margin[7]
+
+### 5. Asset Management Endpoints (`/v5/asset/`)
+Endpoint untuk operasi lintas akun - manajemen aset dan dana:[9][1]
+
+- **GET /v5/asset/exchange-history** - Get coin exchange records[9]
+- **GET /v5/asset/delivery-record** - Get delivery record[9]
+- **GET /v5/asset/settlement-record** - Get USDC session settlement[9]
+- **GET /v5/asset/transfer/query-asset-info** - Get Asset Info (Spot)[9]
+- **GET /v5/asset/transfer/query-account-coins-balance** - Get All Coins Balance[9][3]
+- **GET /v5/asset/transfer/query-account-coin-balance** - Get Single Coin Balance[9]
+- **GET /v5/asset/transfer/query-transfer-coin-list** - Get transferable coins[9]
+- **POST /v5/asset/transfer/inter-transfer** - Create internal transfer[9]
+- **GET /v5/asset/transfer/query-inter-transfer-list** - Get internal transfer records[9]
+- **GET /v5/asset/transfer/query-sub-member-list** - Get Sub UID[9]
+- **POST /v5/asset/transfer/universal-transfer** - Create universal transfer[9]
+- **GET /v5/asset/transfer/query-universal-transfer-list** - Get universal transfer records[9]
+- **GET /v5/asset/deposit/query-allowed-list** - Get allowed deposit coin info[9]
+- **POST /v5/asset/deposit/deposit-to-account** - Set Deposit Account[9]
+- **GET /v5/asset/deposit/query-record** - Get deposit record (on-chain)[9]
+- **GET /v5/asset/deposit/query-sub-member-record** - Get sub account deposit records[9]
+- **GET /v5/asset/deposit/query-internal-record** - Get internal deposit records[9]
+- **GET /v5/asset/deposit/query-address** - Get master deposit address[9]
+- **GET /v5/asset/deposit/query-sub-member-address** - Get sub deposit address[9]
+- **GET /v5/asset/coin/query-info** - Get coin info[9]
+- **GET /v5/asset/withdraw/query-record** - Get withdraw records[9]
+
+### 6. Spot Leveraged Token Endpoints (`/v5/spot-lever-token/`)
+Endpoint untuk Leveraged Tokens di Spot:[1]
+
+- Mendapatkan quotes dari Leveraged Tokens
+- Fungsi pembelian dan penebusan
+
+### 7. Spot Margin Trade Endpoints (`/v5/spot-margin-trade/`)
+Endpoint untuk Margin Trading di Spot:[1]
+
+- Manajemen trading margin untuk produk spot
+
+## Fitur Utama API V5
+
+### Authentication
+- **Public Endpoints**: Market data tidak memerlukan API key[8]
+- **Private Endpoints**: Memerlukan API key dan secret untuk autentikasi[8]
+
+### WebSocket Endpoints
+- **Public Stream**: `wss://stream.bybit.com/v5/public/linear` (untuk linear)
+- **Public Stream**: `wss://stream.bybit.com/v5/public/spot` (untuk spot)
+- **Private Stream**: `wss://stream.bybit.com/v5/private`[10]
+
+### Rate Limits
+API V5 memiliki batasan rate limit yang berbeda untuk setiap endpoint. Untuk menaikkan rate limit, hubungi client manager atau submit aplikasi.[4]
+
+### Order Limits
+- **Perps & Futures**: Maksimal 500 active orders per symbol, 10 conditional orders per symbol[4]
+- **Spot**: 500 orders total, termasuk maksimal 30 TP/SL orders dan 30 conditional orders per symbol[4]
+- **Options**: Maksimal 50 open orders per akun[4]
+
+API V5 mendukung berbagai kategori produk yang dapat dispecify melalui parameter `category`: `spot`, `linear`, `inverse`, dan `option`.[1][4]
+
+# Bybit V5 API - Dokumentasi Lengkap dengan Request Examples
+
+Bybit V5 API menyatukan seluruh fitur trading untuk Spot, Derivatives (Linear/Inverse), dan Options dalam satu set spesifikasi yang konsisten. API V5 mendukung Unified Trading Account (UTA) dan Classic Account dengan struktur URL: `{host}/{version}/{module}`.[1]
+
+## Base Configuration
+
+**Production**: `https://api.bybit.com`
+
+### Struktur Address Segment[1]
+- **v5/market/**: Candlestick, orderbook, ticker, data transaksi platform, aturan finansial, aturan kontrol risiko
+- **v5/order/**: Manajemen order
+- **v5/position/**: Manajemen posisi  
+- **v5/account/**: Operasi akun tunggal - akun funding terpadu, rates, dll
+- **v5/asset/**: Operasi lintas akun - manajemen aset, manajemen dana, dll
+- **v5/spot-lever-token/**: Quote dari Leveraged Tokens di Spot, fungsi beli dan tebus
+- **v5/spot-margin-trade/**: Manajemen Margin Trading di Spot
+
+### Authentication Headers (Private Endpoints)
+```http
+X-BAPI-API-KEY: {apiKey}
+X-BAPI```GN: {signature}
+X-BAPI-TIMESTAMP```timestamp}
+X-BAPI-RECV```NDOW: {recvWindow}
+Content-Type: application/json
+```
+
+## 1. Market Data Endpoints (`/v5/market/`) - Public
+
+Endpoint public yang tidak memerlukan authentication.[2][3]
+
+### GET /v5/market/time - Server Time
+```http
+GET https://api.bybit.com/v5/market/time
+```
+**Response Example**:
+```json
+{
+  "retCode": 0,
+  "retMsg": "OK", 
+  "result": {
+    "time```ond": "1672364174",
+    "timeN```": "1672364174910373000"
+  }
+}````
+
+### GET /v5/market/kline - Kline Data
+```http
+GET https://api.bybit.com/v5/market/kline?category=linear&symbol=BTCUSDT&interval=1&start=1672326400000&end=1672340000000&limit=200
+```
+**Parameters**:
+- `category`: spot/linear/inverse/option
+- `symbol`: Symbol seperti BTCUSDT, BTCUSD (untuk inverse)
+- `interval`: 1,3,5,15,30,60,120,240,360,720,D,W,M
+- `start/end`: timestamp dalam ms (optional)
+- `limit`: jumlah data maksimal (default: 200, max: 1000)
+
+### GET /v5/market/instruments-info - Instrument Info
+```http
+GET https://api.bybit.com/v5/market/instruments-info?category=spot&symbol=BT```DT
+```
+
+### GET /v5/market/orderbook - Orderbook
+```http
+GET https://api.bybit.com/v5/market/orderbook?category=linear```mbol=BTCUSDT&limit=50
+```
+**Parameters**:
+- `limit`: 1,25,50,100,200
+
+### GET /v5/market/tickers - Tickers
+```http
+GET https://api.bybit.com/v5/market/tickers?category=linear&symbol=BTCUSDT````
+
+### GET /v5/market/recent-trade - Recent Trades
+```http
+GET https://api.bybit.com/v5/market/recent-trade?```egory=spot&symbol=BTCUSDT```mit=60
+```
+
+### GET /v5/market/insurance - Insurance Fund
+```http
+GET https://api.bybit.com/v5/market/insurance?coin=BTC
+```
+
+## 2. Order Management Endpoints (`/v5/order/`) - Private
+
+Memerlukan authentication untuk semua endpoint.[4][5]
+
+### POST /v5/order/create - Place Order
+```http
+POST https://api.bybit.com/v5/order/create
+X-BAPI-API-KEY: {apiKey}```BAPI-SIGN: {signature}
+X-```I-TIMESTAMP: 1672211928338
+X-BAPI-```V-WINDOW: 5000
+Content-Type: application/json```
+  "category": "spot",
+  "symbol": "```USDT",
+  "side": "Buy",
+  "order```e": "Limit",
+  "qty": "0.001```  "price": "50000",
+  "time```orce": "GTC"
+}
+```
+
+**Spot Market Order**:
+```json
+{
+  "category": "spot",
+  "symbol": "BTCUSDT",``` "side": "Buy",
+  "orderType": "```ket",
+  "qty": "100"
+}
+```
+
+**Linear Contract Order dengan TP/SL**:
+```json
+{
+  "category": "linear",
+  "symbol": "BTCUSDT",
+  ```de": "Buy",
+  "orderType": "Limit",```"qty": "0.01",
+  "price": "50```",
+  "takeProfit": "55000",
+  "stopLoss```"45000",
+  "timeInForce": "Post```y"
+}
+```
+
+### POST /v5/order/amend - Amend Order
+```http
+POST https://api.bybit.com/v5/order/amend```
+  "category": "linear",
+  "symbol": "```USDT",
+  "orderId": "1```003749386327552",
+  "qty": "0.02",
+  "price": "51```"
+}
+```
+
+### POST /v5/order/cancel - Cancel Order
+```http
+POST https://api.bybit.com/v5/order/cancel
+
+{```"category": "spot",
+  "symbol": "BTCUSDT",
+  "```erId": "1321003749386327552"
+}
+```
+
+### POST /v5/order/cancel-all - Cancel All Orders
+```http
+POST https://api.bybit.com/v5/order/cancel-all
+
+{
+  "category": "linear```  "settleCoin": "```T"
+}
+```
+
+### GET /v5/order/realtime - Active Orders
+```http
+GET https://api.bybit.com/v5/order/realtime?category=linear&symbol=BTC```T&orderStatus=New,Partially```led&limit=50
+```
+
+### POST /v5/order/create-batch - Batch Place Orders
+```http
+POST https://api.bybit.com/v5/order/create-batch```
+  "category": "linear",
+  "request``` [
+    {
+      "symbol": "BTCUSDT",
+      "side": "Buy",
+      "orderType": "Limit",
+      "qty": "0.01",
+      "price": "50000"
+    },
+    {
+      "symbol": "ETHUSDT", 
+      "side": "Sell",
+      "orderType": "Limit",
+      "qty": "0.1",
+      "price": "3000"
+    }
+  ]``````
+
+## 3. Position Management Endpoints (`/v5/position/`) - Private
+
+### GET /v5/position/list - Position Info
+```http
+GET https://api.bybit.com/v5/position/list?category=linear&symbol=BT```DT&limit=20
+```
+
+**Query semua posisi**:[6]
+```http
+GET https://api.bybit.com/v5/position/list?category=linear````
+
+### POST /v5/position/set-leverage - Set Leverage
+```http
+POST https://api.bybit.com/v5/position/set-leverage
+
+{
+  ```tegory": "linear",
+  "symbol": "BTCUS```,
+  "buyLeverage": "10```  "sellLeverage": "10"
+}
+```
+
+### POST /v5/position/trading-stop - Set TP/SL
+```http
+POST https://api.bybit.com/v5/position/trading```op
+
+{
+  "category": "linear",
+  "symbol```"BTCUSDT",
+  "take```fit": "55000",
+  "stopLoss```"45000",
+  "positionIdx": ```
+```
+
+### POST /v5/position/switch-isolated - Switch Margin Mode
+```http
+POST https://api.bybit.com/v5/position/switch-isolated```
+  "category": "linear",
+  "symbol": "BTCUSDT",
+  "```deMode": 1,
+  "buyLeverage": "10",``` "sellLeverage": "10"
+}
+```
+
+### GET /v5/position/closed-pnl - Closed PnL
+```http
+GET https://api.bybit.com/v5/position/closed-pnl?category=linear&symbol=```USDT&limit=50
+```
+
+## 4. Account Management Endpoints (`/v5/account/`) - Private
+
+### GET /v5/account/wallet-balance - Wallet Balance
+```http
+GET https://api.bybit.com/v5/account/wallet-balance?accountType```IFIED&coin=BTC
+```
+
+**Parameters**:
+- `accountType`: UNIFIED/CONTRACT/SPOT[4]
+- `coin`: Optional, specific coin
+
+### GET /v5/account/info - Account Info
+```http
+GET https://api.bybit.com/v5/account/info````
+
+### GET /v5/account/transaction-log - Transaction Log
+```http
+GET https://api.bybit.com/v5/account/transaction-log?account```e=UNIFIED&category=linear&startTime=1672326```000&endTime=1672412800000&limit=50````
+
+### POST /v5/account/set-margin-mode - Set Margin Mode
+```http
+POST https://api.bybit.com/v5/account/set-margin-mode```
+  "setMarginMode": "```TFOLIO_MARGIN"
+}
+```
+
+### GET /v5/account/fee-rate - Fee Rate
+```http
+GET https://api.bybit.com/v5/account/```-rate?category=linear&symbol=BTC```T
+```
+
+## 5. Asset Management Endpoints (`/v5/asset/`) - Private
+
+### POST /v5/asset/transfer/inter-transfer - Internal Transfer
+```http
+POST https://api.bybit.com/v5/asset/transfer/inter-```nsfer
+
+{
+  "transfer```: "uuid-12345",
+  "coin```"USDT",
+  "amount": "100",
+  "fromAccount```e": "SPOT",
+  "toAccountType": "CONTRACT```
+```
+
+### GET /v5/asset/transfer/query-inter-transfer-list - Transfer Records
+```http
+GET https://api.bybit.com/v5/asset/transfer/query-inter```ansfer-list?coin=USDT&start```e=1672326400000&endTime=1672412800000```mit=50
+```
+
+### GET /v5/asset/transfer/query-account-coins-balance - All Coins Balance
+```http
+GET https://api.bybit.com/v5/asset/transfer/```ry-account-coins-balance?accountType=UNIFIED&memb```d=12345&withBonus=1
+```
+
+### GET /v5/asset/deposit/query-record - Deposit Records
+```http
+GET https://api.bybit.com/v5/asset/deposit```ery-record?coin=USDT&startTime=1672```400000&endTime=1672412800000&limit=50````
+
+### GET /v5/asset/withdraw/query-record - Withdraw Records
+```http
+GET https://api.bybit.com/v5/asset/withdraw/query-record?```n=USDT&startTime=1672326400000&en```me=1672412800000&limit=50
+```
+
+### POST /v5/asset/transfer/universal-transfer - Universal Transfer
+```http
+POST https://api.bybit.com/v5/asset/```nsfer/universal-transfer
+
+{
+  "transfer```: "uuid-67890",
+  "coin": "```T", 
+  "amount": "50```  "fromMemberId": "12345",```"toMemberId": "67890",```"fromAccountType": "SPOT```  "toAccountType": "SPOT"
+}
+```
+
+## 6. Spot Leveraged Token Endpoints (`/v5/spot-lever-token/`) - Private
+
+### GET /v5/spot-lever-token/info - Token Info
+```http
+GET https://api.bybit.com/v5/spot-lever-```en/info?ltCoin=BTC3L
+```
+
+### POST /v5/spot-lever-token/purchase - Purchase Token
+```http
+POST https://api.bybit.com/v5/spot-lever-token/purchase```
+  "ltCoin```"BTC3L",
+  "ltAmount": "100"
+}
+```
+
+### POST /v5/spot-lever-token/redeem - Redeem Token
+```http
+POST https://api.bybit.com/v5/spot-lever-token/re```m
+
+{
+  "ltCoin": "BTC3L",```"ltAmount": "100"
+}
+```
+
+## 7. Spot Margin Trade Endpoints (`/v5/spot-margin-trade/`) - Private
+
+### POST /v5/spot-margin-trade/switch-mode - Switch Mode
+```http
+POST https://api.bybit.com/v5/spot-margin-trade/switch-mode
+
+{```"switch": 1
+}
+```
+
+### POST /v5/spot-margin-trade/set-leverage - Set Leverage
+```http
+POST https://api.bybit.com/v5/spot-margin-trade/set-leverage
+
+{
+  "```erage": "3"
+}
+```
+
+### POST /v5/spot-margin-trade/repay - Repay
+```http
+POST https://api.bybit.com/v5/```t-margin-trade/repay
+
+{
+  "coin```"USDT",
+  "compl```Repayment": 1
+}
+```
+
+## 8. WebSocket API
+
+### Public WebSocket
+**URL**: `wss://stream.bybit.com/v5/public/linear` (untuk linear)
+**URL**: `wss://stream.bybit.com/v5/public/spot` (untuk spot)[2]
+
+**Subscribe Orderbook**:
+```javascript
+{
+  "op": "subscribe",
+  "args```["orderbook.50.BTCUSDT"]``````
+
+**Subscribe Ticker**:
+```javascript
+{
+  "op": "subscribe", 
+  "args": ["tickers.BTCUSDT"]
+}
+```
+
+### Private WebSocket
+**URL**: `wss://stream.bybit.com/v5/private`[2]
+
+**Authentication**:
+```javascript
+{
+  "op": "auth",
+  "args": [
+    "api_key",
+    expires_timestamp,
+    "signature"
+  ]
+}
+```
+
+**Subscribe Position**:
+```javascript
+{
+  "op": "subscribe",
+  "args": ["position"]``````
+
+### WebSocket Trade API[7]
+**URL**: `wss://stream.bybit.com/v5/trade`
+
+**Place Order via WebSocket**:
+```javascript
+{
+  "reqId": "test-005",
+  "header": {
+    "X```PI-TIMESTAMP": "1711001595```",
+    "X-BAPI-RECV-WINDOW":```000"
+  },
+  "op```"order.create",
+  "args": [
+    {
+      "symbol": "ETHUSDT",
+      "side": "Buy", 
+      "orderType": "Limit",
+      "qty": "0.2",
+      "price": "2800",
+      "category": "linear",
+      "timeInForce": "PostOnly"
+    }
+  ]
+}
+```## Fitur Khusus V5
+
+### Unified Account Features[1]
+- **Capital Efficiency**: Sharing dana lintas Spot, USDT Perpetual, USDC Perpetual dan Options
+- **Cross-utilization**: Offset profit dan loss lintas posisi berbeda
+- **Borrowing**: Pledge multiple assets sebagai collateral untuk margin trading
+- **Portfolio Margin**: Combined margin antara berbagai kontrak
+
+### Category Parameter[5][1]
+- `spot`: Spot trading
+- `linear`: USDT/USDC perpetual/futures
+- `inverse`: Inverse perpetual/futures  
+- `option`: Options trading
+
+### Rate Limits & Order Limits[5]
+- **Perps & Futures**: Max 500 active orders per symbol
+- **Spot**: Max 500 orders total, max 30 TP/SL orders per symbol
+- **Options**: Max 50 open orders per account
+- **Rate Limits**: Bervariasi per endpoint, gunakan SDK untuk limit lebih tinggi[8]
+
+API V5 menyediakan uniformitas dan efisiensi untuk seluruh lini produk Bybit, menyatukan Spot, Derivatives, dan Options dalam satu set spesifikasi dengan global dictionary yang konsisten.
+
+[1](https://bybit-exchange.github.io/docs/v5/intro)
+[2](https://vezgo.com/blog/bybit-api-cheat-sheet-for-developers/)
+[3](https://bybit-exchange.github.io/docs/api-explorer/v5/market/market)
+[4](https://wundertrading.com/journal/en/learn/article/bybit-api)
+[5](https://bybit-exchange.github.io/docs/v5/order/create-order)
+[6](https://stackoverflow.com/questions/78566649/bybit-api-how-to-get-info-on-all-positions)
+[7](https://bybit-exchange.github.io/docs/v5/websocket/trade/guideline)
+[8](https://www.npmjs.com/package/bybit-api)
+[9](https://bybit-exchange.github.io/docs/v5/position)
+[10](https://github.com/Enclave-Markets/bybit)
+[11](https://dlthub.com/workspace/source/bybit-exchange)
+[12](https://github.com/bybit-exchange/bybit_p2p)
+[13](https://www.bybit.com/en/help-center/article/FAQ-API-Brokers-Program)
+[14](https://github.com/hirokisan/bybit)
+[15](https://www.bybit.com/future-activity/en/developer)
+[16](https://www.bybit.com/en/help-center/article/How-to-retrieve-API-documentations)
+[17](https://bybit-exchange.github.io/docs/api-explorer/v5/asset/asset)
+[18](https://www.npmjs.com/package/bybit-api/v/3.10.32)
+[19](https://unpkg.com/browse/bybit-api@3.10.27/README.md)
+[20](https://github.com/tiagosiebler/bybit-api)
+[21](https://gealber.com/bybit-websocket-tickers)
+[22](https://bybit-exchange.github.io/docs/v5/ws/connect)
+[23](https://learn.bybitglobal.com/en/bybit-guide/how-to-create-a-bybit-api-key)
+[24](https://bybit-exchange.github.io/docs/changelog/v5)
+[25](https://www.meshconnect.com/blog/does-bybit-have-an-api)
+
+[1](https://bybit-exchange.github.io/docs/v5/intro)
+[2](https://bybit-exchange.github.io/docs/api-explorer/v5/market/market)
+[3](https://wundertrading.com/journal/en/learn/article/bybit-api)
+[4](https://bybit-exchange.github.io/docs/v5/order/create-order)
+[5](https://www.bybit.com/en/help-center/article/FAQ-API-Brokers-Program)
+[6](https://www.bybit.com/en/help-center/article/How-to-retrieve-API-documentations)
+[7](https://github.com/Enclave-Markets/bybit)
+[8](https://vezgo.com/blog/bybit-api-cheat-sheet-for-developers/)
+[9](https://github.com/bybit-exchange/pybit/issues/267)
+[10](https://github.com/bmoscon/cryptofeed/issues/1075)
+[11](https://www.bybit.com/future-activity/en/developer)
+[12](https://bybit-exchange.github.io/docs/changelog/v5)
+[13](https://github.com/bybit-exchange/bybit_p2p)
+[14](https://www.npmjs.com/package/bybit-api)
+
+
+
+
+
+
+
+#ANOTHER MARKET API
+# CRYPTOCURRENCY EXCHANGE API DOCUMENTATION
+# Complete Public API Endpoints for All Major CEX
+
+## 1. INDODAX
+Base URL: https://indodax.com/api/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /ticker/{pair} - Get ticker for specific pair (e.g., btc_idr)
+• GET /tickers - Get all market tickers
+• GET /trades/{pair} - Get recent trades for specific pair
+• GET /depth/{pair} - Get order book for specific pair
+
+Examples:
+https://indodax.com/api/btc_idr/ticker
+https://indodax.com/api/tickers
+https://indodax.com/api/btc_idr/trades
+https://indodax.com/api/btc_idr/depth
+
+## 2. TOKOCRYPTO (TKO)
+Base URL: https://www.tokocrypto.com/open/v1/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /common/symbols - Get all trading symbols
+• GET /market/ticker - Get ticker for all symbols
+• GET /market/ticker?symbol={symbol} - Get ticker for specific symbol
+• GET /market/depth?symbol={symbol} - Get order book
+• GET /market/klines?symbol={symbol}&interval={interval} - Get candlestick data
+• GET /market/trades?symbol={symbol} - Get recent trades
+
+Examples:
+https://www.tokocrypto.com/open/v1/common/symbols
+https://www.tokocrypto.com/open/v1/market/ticker
+https://www.tokocrypto.com/open/v1/market/depth?symbol=BTC_USDT
+
+## 3. BYBIT
+Base URL: https://api.bybit.com/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /v5/market/instruments-info?category={category} - Get instrument info
+• GET /v5/market/orderbook?category={category}&symbol={symbol} - Get order book
+• GET /v5/market/tickers?category={category} - Get tickers
+• GET /v5/market/kline?category={category}&symbol={symbol}&interval={interval} - Get klines
+• GET /v5/market/recent-trade?category={category}&symbol={symbol} - Get recent trades
+• GET /v5/market/trading-records?category={category}&symbol={symbol} - Get trading records
+
+Examples:
+https://api.bybit.com/v5/market/tickers?category=spot
+https://api.bybit.com/v5/market/orderbook?category=spot&symbol=BTCUSDT
+https://api.bybit.com/v5/market/kline?category=spot&symbol=BTCUSDT&interval=1
+
+## 4. BINANCE
+Base URL: https://api.binance.com/api/v3/
+Alternative: https://data-api.binance.vision/api/v3/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /ping - Test connectivity
+• GET /time - Check server time
+• GET /exchangeInfo - Exchange trading rules and symbol information
+• GET /depth?symbol={symbol} - Order book
+• GET /trades?symbol={symbol} - Recent trades list
+• GET /klines?symbol={symbol}&interval={interval} - Kline/candlestick data
+• GET /ticker/24hr - 24hr ticker price change statistics
+• GET /ticker/price - Symbol price ticker
+• GET /ticker/bookTicker - Symbol order book ticker
+
+Examples:
+https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT
+https://api.binance.com/api/v3/depth?symbol=BTCUSDT
+https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h
+
+## 5. KUCOIN
+Base URL: https://api.kucoin.com/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /api/v1/symbols - Get all trading symbols
+• GET /api/v1/market/allTickers - Get all tickers
+• GET /api/v1/market/stats?symbol={symbol} - Get ticker for specific symbol
+• GET /api/v1/market/orderbook/level2_20?symbol={symbol} - Get order book
+• GET /api/v1/market/candles?symbol={symbol}&type={type} - Get klines
+• GET /api/v1/market/histories?symbol={symbol} - Get trade histories
+• GET /api/v1/currencies - Get currency info
+
+Examples:
+https://api.kucoin.com/api/v1/market/allTickers
+https://api.kucoin.com/api/v1/market/orderbook/level2_20?symbol=BTC-USDT
+https://api.kucoin.com/api/v1/market/candles?symbol=BTC-USDT&type=1hour
+
+## 6. HUOBI
+Base URL: https://api.huobi.pro/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /market/history/kline?symbol={symbol}&period={period} - Get klines
+• GET /market/detail/merged?symbol={symbol} - Get ticker
+• GET /market/tickers - Get all tickers
+• GET /market/depth?symbol={symbol}&type={type} - Get order book
+• GET /market/trade?symbol={symbol} - Get recent trades
+• GET /v1/common/symbols - Get all symbols
+• GET /v1/common/currencys - Get all currencies
+
+Examples:
+https://api.huobi.pro/market/tickers
+https://api.huobi.pro/market/depth?symbol=btcusdt&type=step1
+https://api.huobi.pro/market/detail/merged?symbol=btcusdt
+
+## 7. MEXC
+Base URL: https://api.mexc.com/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /api/v3/ping - Test connectivity
+• GET /api/v3/time - Check server time
+• GET /api/v3/exchangeInfo - Exchange information
+• GET /api/v3/depth?symbol={symbol} - Order book
+• GET /api/v3/trades?symbol={symbol} - Recent trades
+• GET /api/v3/klines?symbol={symbol}&interval={interval} - Kline data
+• GET /api/v3/ticker/24hr - 24hr ticker statistics
+• GET /api/v3/ticker/price - Price ticker
+• GET /api/v3/ticker/bookTicker - Book ticker
+
+Examples:
+https://api.mexc.com/api/v3/ticker/price?symbol=BTCUSDT
+https://api.mexc.com/api/v3/depth?symbol=BTCUSDT
+https://api.mexc.com/api/v3/klines?symbol=BTCUSDT&interval=1h
+
+## 8. BITGET
+Base URL: https://api.bitget.com/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /api/spot/v1/public/time - Server time
+• GET /api/spot/v1/public/currencies - Get currencies
+• GET /api/spot/v1/public/products - Get all products
+• GET /api/spot/v1/market/{symbol}/ticker - Get ticker
+• GET /api/spot/v1/market/tickers - Get all tickers
+• GET /api/spot/v1/market/{symbol}/depth - Get depth
+• GET /api/spot/v1/market/{symbol}/trades - Get trades
+• GET /api/spot/v1/market/{symbol}/candles - Get candles
+
+Examples:
+https://api.bitget.com/api/spot/v1/market/tickers
+https://api.bitget.com/api/spot/v1/market/BTCUSDT_SPBL/ticker
+https://api.bitget.com/api/spot/v1/market/BTCUSDT_SPBL/depth
+
+## 9. OKX (OKEX)
+Base URL: https://www.okx.com/api/v5/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /public/instruments?instType={instType} - Get instruments
+• GET /market/ticker?instId={instId} - Get ticker
+• GET /market/tickers?instType={instType} - Get all tickers
+• GET /market/books?instId={instId} - Get order book
+• GET /market/trades?instId={instId} - Get trades
+• GET /market/candles?instId={instId}&bar={bar} - Get candlesticks
+• GET /public/time - Get system time
+
+Examples:
+https://www.okx.com/api/v5/market/ticker?instId=BTC-USDT
+https://www.okx.com/api/v5/market/books?instId=BTC-USDT
+https://www.okx.com/api/v5/market/candles?instId=BTC-USDT&bar=1H
+
+## 10. KRAKEN
+Base URL: https://api.kraken.com/0/public/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /Time - Get server time
+• GET /SystemStatus - Get system status
+• GET /Assets - Get asset info
+• GET /AssetPairs - Get tradeable asset pairs
+• GET /Ticker?pair={pair} - Get ticker information
+• GET /Depth?pair={pair} - Get order book
+• GET /Trades?pair={pair} - Get recent trades
+• GET /OHLC?pair={pair} - Get OHLC data
+
+Examples:
+https://api.kraken.com/0/public/Ticker?pair=BTCUSD
+https://api.kraken.com/0/public/Depth?pair=BTCUSD
+https://api.kraken.com/0/public/OHLC?pair=BTCUSD
+
+## 11. GATE.IO
+Base URL: https://api.gateio.ws/api/v4/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /spot/currencies - List all currencies
+• GET /spot/currency_pairs - List all currency pairs
+• GET /spot/tickers - Retrieve ticker information
+• GET /spot/order_book?currency_pair={pair} - Retrieve order book
+• GET /spot/trades?currency_pair={pair} - Retrieve market trades
+• GET /spot/candlesticks?currency_pair={pair} - Market candlesticks
+• GET /spot/time - Get server current time
+
+Examples:
+https://api.gateio.ws/api/v4/spot/tickers
+https://api.gateio.ws/api/v4/spot/order_book?currency_pair=BTC_USDT
+https://api.gateio.ws/api/v4/spot/candlesticks?currency_pair=BTC_USDT
+
+## 12. COINBASE
+Base URL: https://api.coinbase.com/api/v3/brokerage/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /time - Get server time
+• GET /market/products - List products
+• GET /market/products/{product_id} - Get single product
+• GET /market/product_book?product_id={product_id} - Get product book
+• GET /market/products/{product_id}/candles - Get product candles
+• GET /market/products/{product_id}/ticker - Get product ticker
+
+Examples:
+https://api.coinbase.com/api/v3/brokerage/market/products
+https://api.coinbase.com/api/v3/brokerage/market/product_book?product_id=BTC-USD
+https://api.coinbase.com/api/v3/brokerage/market/products/BTC-USD/ticker
+
+## 13. CRYPTO.COM
+Base URL: https://api.crypto.com/v1/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /symbols - Get all available market symbols
+• GET /ticker - Get tickers for all markets
+• GET /ticker?symbol={symbol} - Get ticker for specific market
+• GET /trades?symbol={symbol} - Get recent trades
+• GET /depth?symbol={symbol} - Get order book
+• GET /klines?symbol={symbol}&period={period} - Get kline data
+
+Examples:
+https://api.crypto.com/v1/symbols
+https://api.crypto.com/v1/ticker
+https://api.crypto.com/v1/depth?symbol=BTCUSD
+
+## 14. BITFINEX
+Base URL: https://api-pub.bitfinex.com/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /v2/platform/status - Platform status
+• GET /v2/tickers?symbols={symbols} - Get tickers
+• GET /v2/ticker/{symbol} - Get ticker for symbol
+• GET /v2/trades/{symbol}/hist - Get trades
+• GET /v2/book/{symbol}/{precision} - Get order book
+• GET /v2/candles/trade:{timeframe}:{symbol}/hist - Get candles
+
+Examples:
+https://api-pub.bitfinex.com/v2/ticker/tBTCUSD
+https://api-pub.bitfinex.com/v2/book/tBTCUSD/P0
+https://api-pub.bitfinex.com/v2/candles/trade:1h:tBTCUSD/hist
+
+## 15. POLONIEX
+Base URL: https://api.poloniex.com/
+Authentication: Not required for public endpoints
+
+Public Endpoints:
+• GET /markets - List all markets
+• GET /markets/{symbol} - Get market info
+• GET /markets/{symbol}/orderBook - Get order book
+• GET /markets/{symbol}/trades - Get recent trades
+• GET /markets/{symbol}/candles - Get candles
+• GET /markets/ticker24h - Get 24h tickers
+• GET /markets/{symbol}/ticker24h - Get 24h ticker for symbol
+
+Examples:
+https://api.poloniex.com/markets
+https://api.poloniex.com/markets/BTC_USDT/orderBook
+https://api.poloniex.com/markets/ticker24h
+
+## USAGE EXAMPLES
+
+JavaScript Fetch Example:
