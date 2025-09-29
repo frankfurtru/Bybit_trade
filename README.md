@@ -288,3 +288,10 @@ Telegram Commands
 
 ![License](https://img.shields.io/github/license/frankfurtru/Bybit_trade)
 ![Issues](https://img.shields.io/github/issues/frankfurtru/Bybit_trade)
+
+docs: polish README + add examples
+
+- Added badges (License, Issues)
+- Added Quickstart and examples/get_price.py
+- Added CHANGELOG and CONTRIBUTING
+
