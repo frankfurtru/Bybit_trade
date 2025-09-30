@@ -286,8 +286,11 @@ Telegram Commands
 - `/signal <category> <symbol> <interval> <mode>`: Prediksi XGBoost (scalping/swing) dari kline terkini.
 - `/ask <pertanyaan>`: Natural language router → LLM memilih aksi (tickers, kline, orderbook, trades, balance, positions, orders, create/cancel order) dan bot mengeksekusi.
 
+
+
 ![License](https://img.shields.io/github/license/frankfurtru/Bybit_trade)
 ![Issues](https://img.shields.io/github/issues/frankfurtru/Bybit_trade)
+
 
 docs: polish README + add examples
 
