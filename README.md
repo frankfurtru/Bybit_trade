@@ -297,4 +297,8 @@ docs: polish README + add examples
 - Added badges (License, Issues)
 - Added Quickstart and examples/get_price.py
 - Added CHANGELOG and CONTRIBUTING
+- 
+## Quickstart
+```bash
+python examples/get_price.py
 
