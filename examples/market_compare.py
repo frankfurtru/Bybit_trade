@@ -4,7 +4,9 @@ Market compare (public endpoints, no API keys).
 Compares best bid/ask & mid across multiple exchanges and prints a table.
 
 Usage:
-  python examples/market_compare.py --symbols BTCUSDT ETHUSDT --ref binance
+  python examples/market_compare.py
+  python examples/market_compare.py --symbols BTCUSDT ETHUSDT SOLUSDT --ref bybit
+
 
 Exchanges included (public REST):
 - binance  (spot)
